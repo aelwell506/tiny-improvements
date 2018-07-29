@@ -5,22 +5,26 @@ const KudosForm = props => (
     <Form>
         <FormGroup>
             <Label>Give Kudos to</Label>
-            <Input type="select" name="select" id="exampleSelect" >
-                <p>  </p>
+            <Input type="select" name="name" id="exampleSelect" onChange={props.updatereceiver} value={props.receiver}>
+                {props.users.map((e, index) => <option key={index} > {e.name} </option>)}
             </Input>
         </FormGroup>
-        <Form>
-            <FormGroup>
-                <Input type="text" placeholder="Kudos Title" />
-            </FormGroup>
-        </Form>
-        <Form>
-            <FormGroup>
-                <Input type="textarea" placeholder="Kudos text" />
-            </FormGroup>
-        </Form>
+        <FormGroup>
+            <Label>Kudos Sender</Label>
+            <Input type="select" name="name" id="exampleSelect" onChange={props.updatesender} value={props.sender}>
+                {props.users.map((e, index) => <option key={index} > {e.name} </option>)}
+            </Input>
+        </FormGroup>
+        <FormGroup>
+            <Input type="text" placeholder="Kudos Title" onChange={props.updateKudosTitle} value-={props.kudosTitle} />
+        </FormGroup>
+        <FormGroup>
+            <Input type="textarea" placeholder="Kudos text" onChange={props.updateKudosText} value={props.kudosText} />
+        </FormGroup>
+        <FormGroup>
+            <Button onClick={props.postKudo}> Submit </Button>
+        </FormGroup>
     </Form>
-
 )
 
 export default KudosForm;
