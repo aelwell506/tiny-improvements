@@ -13,8 +13,16 @@ class App extends Component {
       kudosText: "",
       kudosTitle: "",
       receiver: "",
-      sender: ""
+      sender: "",
+      modal: false
     }
+    this.toggle = this.toggle.bind(this);
+  }
+
+  toggle() {
+    this.setState({
+      modal: !this.state.modal
+    });
   }
 
   postKudo = () => {
@@ -83,7 +91,29 @@ class App extends Component {
           <Col md="12" lg="3">
             <Card>
               <CardBody className="mx-auto">
-                <Button color="success">Give Kudos</Button>
+                <Button color="success" onClick={this.toggle}>Give Kudos</Button>
+                <Modal isOpen={this.state.modal} toggle={this.toggle} className={this.props.className}>
+                  <ModalHeader toggle={this.toggle}>Give Kudos</ModalHeader>
+                  <ModalBody>
+                    <KudosForm
+                      users={this.state.users}
+                      updateKudosText={this.updateKudosText}
+                      kudosText={this.state.kudosText}
+                      kudosTitle={this.state.kudosTitle}
+                      updateKudosTitle={this.updateKudosTitle}
+                      updatereceiver={this.updatereceiver}
+                      receiver={this.state.receiver}
+                      updatesender={this.updatesender}
+                      sender={this.state.sender}
+                    />
+                  </ModalBody>
+                  <ModalFooter>
+                    <Button color="success" onClick={this.postKudo}>Submit</Button>{' '}
+                    <Button color="danger" onClick={this.toggle}>Cancel</Button>
+                  </ModalFooter>
+                </Modal>
+
+
               </CardBody>
             </Card>
           </Col>
@@ -93,18 +123,7 @@ class App extends Component {
         </Row>
         <Row>
           <Col md="12">
-            <KudosForm
-              users={this.state.users}
-              postKudo={this.postKudo}
-              updateKudosText={this.updateKudosText}
-              kudosText={this.state.kudosText}
-              kudosTitle={this.state.kudosTitle}
-              updateKudosTitle={this.updateKudosTitle}
-              updatereceiver={this.updatereceiver}
-              receiver={this.state.receiver}
-              updatesender={this.updatesender}
-              sender={this.state.sender}
-            />
+
           </Col>
         </Row>
       </Container >

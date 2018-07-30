@@ -21,9 +21,6 @@ const KudosForm = props => (
         <FormGroup>
             <Input type="textarea" placeholder="Kudos text" onChange={props.updateKudosText} value={props.kudosText} />
         </FormGroup>
-        <FormGroup>
-            <Button onClick={props.postKudo}> Submit </Button>
-        </FormGroup>
     </Form>
 )
 
