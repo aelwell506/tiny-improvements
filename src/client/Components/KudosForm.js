@@ -16,10 +16,10 @@ const KudosForm = props => (
             </Input>
         </FormGroup>
         <FormGroup>
-            <Input type="text" placeholder="Kudos Title" onChange={props.updateKudosTitle} value-={props.kudosTitle} />
+            <Input type="text" placeholder="Kudos Title" onChange={props.updateKudosTitle} value-={props.title} />
         </FormGroup>
         <FormGroup>
-            <Input type="textarea" placeholder="Kudos text" onChange={props.updateKudosText} value={props.kudosText} />
+            <Input type="textarea" placeholder="Kudos text" onChange={props.updateKudosText} value={props.comment} />
         </FormGroup>
     </Form>
 )

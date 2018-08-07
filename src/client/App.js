@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Col, Container, Row, Card, CardBody, Button, Form, FormGroup, Input, Label, Modal, ModalHeader, ModalBody, ModalFooter } from "reactstrap";
 import AwardCard from './Components/AwardCard';
 import KudosForm from "./Components/KudosForm";
+import FilterForm from "./Components/FilterForm";
 import axios from "axios";
 
 class App extends Component {
@@ -10,10 +11,11 @@ class App extends Component {
     this.state = {
       users: [],
       awards: [],
-      kudosText: "",
-      kudosTitle: "",
+      comment: "",
+      title: "",
       receiver: "",
       sender: "",
+      filteruserAwards: "",
       modal: false
     }
     this.toggle = this.toggle.bind(this);
@@ -27,12 +29,25 @@ class App extends Component {
 
   postKudo = () => {
     axios.post("/api/kudos", {
-      id: 4,
-      title: this.state.kudosTitle,
-      comment: this.state.kudosText,
-      receiver: this.state.receiver,
-      sender: this.state.sender
+      Name: this.state.title,
+      Comment__c: this.state.comment,
+      Receiver__c: this.state.users.find(user => user.name === this.state.receiver).id,
+      Sender__c: this.state.users.find(user => user.name === this.state.sender).id
     })
+      .then(response => {
+        // this.setState({
+        //   awards: response.data
+        // })
+      })
+    this.toggle()
+  }
+
+  updateFilter = event => {
+    this.setState({ filteruserAwards: event.target.value });
+  };
+
+  getFilterAwards = () => {
+    axios.get("/api/filter/" + this.state.filteruserAwards)
       .then(response => {
         this.setState({
           awards: response.data
@@ -41,11 +56,11 @@ class App extends Component {
   }
 
   updateKudosText = (event) => {
-    this.setState({ kudosText: event.target.value });
+    this.setState({ comment: event.target.value });
   }
 
   updateKudosTitle = (event) => {
-    this.setState({ kudosTitle: event.target.value });
+    this.setState({ title: event.target.value });
   }
 
   updatereceiver = (event) => {
@@ -57,7 +72,7 @@ class App extends Component {
   }
 
   componentDidMount = () => {
-    axios.get("/api/awards")
+    axios.get("/api/kudos")
       .then(response => {
         this.setState({
           awards: response.data
@@ -67,7 +82,9 @@ class App extends Component {
     axios.get("/api/users")
       .then(response => {
         this.setState({
-          users: response.data
+          users: response.data,
+          receiver: response.data[0],
+          sender: response.data[0]
         })
       })
     axios.get("/api/kudos")
@@ -86,9 +103,9 @@ class App extends Component {
             <h1>Tiny Progress</h1>
           </Col>
         </Row>
-        <br />
+
         <Row>
-          <Col md="12" lg="3">
+          <Col md="3">
             <Card>
               <CardBody className="mx-auto">
                 <Button color="success" onClick={this.toggle}>Give Kudos</Button>
@@ -98,8 +115,8 @@ class App extends Component {
                     <KudosForm
                       users={this.state.users}
                       updateKudosText={this.updateKudosText}
-                      kudosText={this.state.kudosText}
-                      kudosTitle={this.state.kudosTitle}
+                      comment={this.state.comment}
+                      title={this.state.title}
                       updateKudosTitle={this.updateKudosTitle}
                       updatereceiver={this.updatereceiver}
                       receiver={this.state.receiver}
@@ -112,18 +129,26 @@ class App extends Component {
                     <Button color="danger" onClick={this.toggle}>Cancel</Button>
                   </ModalFooter>
                 </Modal>
-
-
+              </CardBody>
+            </Card>
+            <br />
+            <Card>
+              <CardBody className="mx-auto">
+                <FilterForm
+                  users={this.state.users}
+                  updateFilter={this.updateFilter}
+                  getFilterAwards={this.getFilterAwards}
+                  filteruserAwards={this.state.filteruserAwards}
+                />
               </CardBody>
             </Card>
           </Col>
           <Col md="12" lg="9">
-            {this.state.awards.map((e, index) => <AwardCard key={index} title={e.title} comment={e.comment} receiver={e.receiver} sender={e.sender} />)}
-          </Col>
-        </Row>
-        <Row>
-          <Col md="12">
-
+            {this.state.awards.map((e, index) => <AwardCard key={index}
+              title={e.name}
+              comment={e.comment__c}
+              receiver={e.receiver__r.Name}
+              sender={e.sender__r.Name} />)}
           </Col>
         </Row>
       </Container >

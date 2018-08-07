@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "concurrently --kill-others \"webpack --watch\" \"nodemon --delay 1500ms src/server/index\"",
-    "start:server": "nodemon src/server/index",
+    "start": "concurrently --kill-others \"webpack --watch\" \"node src/server/index\"",
+    "start:server": "node src/server/index",
     "heroku-postbuild": "npm run build"
   },
   "events": {
